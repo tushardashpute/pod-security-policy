@@ -89,20 +89,6 @@ Default policy looks like this:
 
 This is the one from AWS EKS default PodSecurityPolicy. It’s a Standard Kubernetes resource definition format.Running your cluster with this policy is identical to running your cluster with the PodSecurityPolicy admission controller disabled.
 
-Lets approach this subject from a application standpoint. Most applications are deployed into EKS in form of deployments running pods. Or sample deployment will be such:
-
-Assuming we have agreen-field EKS with no special security controls on cluster/namespaces :
-In the manifest alpine-restricted.yml , we are defining a few security contexts at the pod and container level.
-
-**runAsUser**: 1000 means all containers in the pod will run as user UID 1000
-
-**fsGroup**: 2000 means the owner for mounted volumes and any files created in that volume will be GID 2000
-
-**allowPrivilegeEscalation**: false means the container cannot escalate privileges
-
-**readOnlyRootFilesystem**: true means the container can only read the root filesystem
-
-
 <img width="883" alt="image" src="https://user-images.githubusercontent.com/74225291/197380564-ab9efa25-d8c9-493b-a4a8-47ff54cd5e75.png">
 
 
@@ -147,7 +133,7 @@ Now let’s run a test:
             ports:
             - containerPort: 33333
 
-kubectl apply -f springboot-deployment.yaml 
+**kubectl apply -f springboot-deployment.yaml **
 
 A very simple image with a spring-boot app, but in the Dockerfile, it runs as user ID 0 (root). You can try applying the above pod, and you will get error:
 
@@ -178,7 +164,7 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
             ports:
             - containerPort: 33333
             
-kubectl apply -f springboot-deployment-nonroot.yaml     
+**kubectl apply -f springboot-deployment-nonroot.yaml **
 
 If you apply this one, it would work, because in this image it runs as user ID 2000.
 
