@@ -212,7 +212,5 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
 
 If you apply this one, it would work, because in this image it runs as user ID 2000.
 
-We can take another example, where pod is tring to escalate permissions to privileged user.
-
 
 
