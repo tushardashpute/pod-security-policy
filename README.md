@@ -99,7 +99,9 @@ In the manifest alpine-restricted.yml , we are defining a few security contexts 
 **allowPrivilegeEscalation**: false means the container cannot escalate privileges
 **readOnlyRootFilesystem**: true means the container can only read the root filesystem
 
-https://res.cloudinary.com/practicaldev/image/fetch/s--hrJarSwJ--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/pwtsbifjjfu3ooyup3wu.png
+
+<img width="883" alt="image" src="https://user-images.githubusercontent.com/74225291/197380564-ab9efa25-d8c9-493b-a4a8-47ff54cd5e75.png">
+
 
 **Delete the default Amazon EKS pod security policy**
 
