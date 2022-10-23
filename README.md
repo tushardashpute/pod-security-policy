@@ -133,7 +133,7 @@ Now let’s run a test:
             ports:
             - containerPort: 33333
 
-**kubectl apply -f springboot-deployment.yaml **
+**kubectl apply -f springboot-deployment.yaml**
 
 A very simple image with a spring-boot app, but in the Dockerfile, it runs as user ID 0 (root). You can try applying the above pod, and you will get error:
 
@@ -164,7 +164,7 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
             ports:
             - containerPort: 33333
             
-**kubectl apply -f springboot-deployment-nonroot.yaml **
+**kubectl apply -f springboot-deployment-nonroot.yaml**
 
 If you apply this one, it would work, because in this image it runs as user ID 2000.
 
