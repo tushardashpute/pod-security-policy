@@ -90,3 +90,5 @@ Default policy looks like this:
         rule: 'RunAsAny'
       readOnlyRootFilesystem: false
 
+This is the one from AWS EKS default PodSecurityPolicy. It’s a Standard Kubernetes resource definition format.Running your cluster with this policy is identical to running your cluster with the PodSecurityPolicy admission controller disabled.
+
