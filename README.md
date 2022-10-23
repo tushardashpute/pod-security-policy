@@ -1,8 +1,19 @@
-# What is a Pod Security Policy and why should I care?
+# What is Pod Security Policy?
 
-As a cluster admin, you may have wondered how to enforce certain policies concerning runtime properties for pods in a cluster. For example, you may want to prevent developers from running a pod with containers that don’t define a user (hence, run as root). You may have documentation for developers about setting the security context in a pod specification, and developers may follow it … or they may choose not to. In any case, you need a mechanism to enforce such policies cluster-wide.
+In Kubernetes, workloads are deployed as Pods, which expose a lot of the functionality of running Docker containers.
+Pod Security Policies are cluster-wide resources that control security sensitive aspects of pod specification. PSP objects define a set of conditions that a pod must run with in order to be accepted into the system, as well as defaults for their related fields. PodSecurityPolicy is an optional admission controller that is enabled by default through the API, thus policies can be deployed without the PSP admission plugin enabled. This functions as a validating and mutating controller simultaneously.
 
-**The solution is to use Pod Security Policies (PSP) as part of a defense-in-depth strategy.**
+**Pod Security Policies allow you to control:**
 
-PSP is a cluster-wide resource, enabling you as a cluster admin to enforce the usage of security contexts in your cluster. The enforcement of PSPs is carried out by the API server’s admission controller. In a nutshell: if a pod spec doesn’t meet what you defined in a PSP, the API server will refuse to launch it.For PSPs to work, the respective admission(https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#how-do-i-turn-on-an-admission-control-plug-in) plugin must be enabled, and permissions must be granted to users. From EKS 1.13 cluster now has the PSP admission plugin enabled by default, so there’s nothing EKS users need to do.
+- The running of privileged containers
+- Usage of host namespaces
+- Usage of host networking and ports
+- Usage of volume types
+- Usage of the host filesystem
+- A white list of Flexvolume drivers
+- The allocation of an FSGroup that owns the pod’s volumes
+- Requirements for use of a read only root file system
+- The user and group IDs of the container
+- Escalations of root privileges
+- Linux capabilities, SELinux context, AppArmor, seccomp, sysctl profile
 
