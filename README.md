@@ -175,5 +175,5 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
             
 kubectl apply -f springboot-deployment-nonroot.yaml     
 
-If you apply this one, it would work, because in this image it runs as user ID 1000.
+If you apply this one, it would work, because in this image it runs as user ID 2000.
 
