@@ -1,0 +1,11 @@
+FROM openjdk:13-alpine
+# Create a group and user
+RUN addgroup -g 2000 --system appgroup && \
+    adduser --uid 2000 --system appuser -g 2000
+
+# Tell docker that all future commands should run as the appuser user
+USER 2000
+
+Volume /tmp
+ADD /target/*.jar springbootgitlab-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/springbootgitlab-0.0.1-SNAPSHOT.jar"]
