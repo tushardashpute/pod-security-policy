@@ -135,7 +135,15 @@ If you create more restrictive policies for your pods, then after doing so, you 
         persistentVolumeClaim
         awsElasticBlockStore
 
-  
+privileged: false means prevent escalations to root.
+allowPrivilegeEscalation: false means the container cannot escalate privileges
+readOnlyRootFilesystem: true means the container can only read the root filesystem
+runAsUser: MustRunAsNonRoot : Require the container to run without root privileges
+volumes: Allow core volume types.
+hostNetwork: false means container cannot use host network
+hostIPC: false means container cannot use host IPC
+hostPID: false means container cannot access host PID
+
 <img width="732" alt="image" src="https://user-images.githubusercontent.com/74225291/197380133-9e305ba9-42f2-4b29-99a9-03ba7ae73abe.png">
 
 <img width="1332" alt="image" src="https://user-images.githubusercontent.com/74225291/197380184-a662ceac-b133-4c68-90c9-958ea86107a0.png">
@@ -203,4 +211,8 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
 <img width="1525" alt="image" src="https://user-images.githubusercontent.com/74225291/197381674-9340072c-7763-4c9c-adab-021db1e35c9f.png">
 
 If you apply this one, it would work, because in this image it runs as user ID 2000.
+
+We can take another example, where pod is tring to escalate permissions to privileged user.
+
+
 
