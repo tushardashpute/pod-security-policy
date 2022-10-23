@@ -106,4 +106,74 @@ https://res.cloudinary.com/practicaldev/image/fetch/s--hrJarSwJ--/c_limit%2Cf_au
 If you create more restrictive policies for your pods, then after doing so, you can delete the default Amazon EKS eks.privileged pod security policy to enable your custom policies.
 
   kubectl delete psp eks.privileged
+  kubectl delete clusterrole eks:podsecuritypolicy:privileged
+  kubectl delete clusterrolebindings eks:podsecuritypolicy:authenticated
   
+<img width="850" alt="image" src="https://user-images.githubusercontent.com/74225291/197380099-66d63695-d737-404e-be25-1918aa42bc03.png">
+
+  kubectl apply -f restricted.yaml 
+  
+<img width="732" alt="image" src="https://user-images.githubusercontent.com/74225291/197380133-9e305ba9-42f2-4b29-99a9-03ba7ae73abe.png">
+
+<img width="1332" alt="image" src="https://user-images.githubusercontent.com/74225291/197380184-a662ceac-b133-4c68-90c9-958ea86107a0.png">
+
+Now let’s run a test:
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: springboot
+      labels:
+        app: springboot
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: springboot
+      template:
+        metadata:
+          labels:
+            app: springboot
+        spec:
+          containers:
+          - name: springboot
+            image: tushardashpute/springboot-k8s:latest
+            imagePullPolicy: Always
+            ports:
+            - containerPort: 33333
+
+kubectl apply -f springboot-deployment.yaml 
+
+A very simple image with a spring-boot app, but in the Dockerfile, it runs as user ID 0 (root). You can try applying the above pod, and you will get error:
+
+    Error: container has runAsNonRoot and image will run as root
+    
+ For an image that runs as another user ID:
+ 
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: springboot
+      labels:
+        app: springboot
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: springboot
+      template:
+        metadata:
+          labels:
+            app: springboot
+        spec:
+          containers:
+          - name: springboot
+            image: tushardashpute/springboot-k8s:nonroot
+            imagePullPolicy: Always
+            ports:
+            - containerPort: 33333
+            
+kubectl apply -f springboot-deployment-nonroot.yaml     
+
+If you apply this one, it would work, because in this image it runs as user ID 1000.
+
