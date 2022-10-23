@@ -104,6 +104,38 @@ If you create more restrictive policies for your pods, then after doing so, you 
 
   kubectl apply -f restricted.yaml 
   
+    Spec:
+      Allow Privilege Escalation:  false
+      Fs Group:
+        Ranges:
+          Max:  65535
+          Min:  1
+        Rule:   MustRunAs
+      Host Ports:
+        Max:                      65535
+        Min:                      1025
+      Read Only Root Filesystem:  true
+      Required Drop Capabilities:
+        ALL
+      Run As User:
+        Rule:  MustRunAsNonRoot
+      Se Linux:
+        Rule:  RunAsAny
+      Supplemental Groups:
+        Ranges:
+          Max:  65535
+          Min:  1
+        Rule:   MustRunAs
+      Volumes:
+        configMap
+        emptyDir
+        projected
+        secret
+        downwardAPI
+        persistentVolumeClaim
+        awsElasticBlockStore
+
+  
 <img width="732" alt="image" src="https://user-images.githubusercontent.com/74225291/197380133-9e305ba9-42f2-4b29-99a9-03ba7ae73abe.png">
 
 <img width="1332" alt="image" src="https://user-images.githubusercontent.com/74225291/197380184-a662ceac-b133-4c68-90c9-958ea86107a0.png">
