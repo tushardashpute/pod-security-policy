@@ -46,9 +46,6 @@ However, if you modify the policy after pods are already up and running, making 
 PodSecurityPolicy, as the name suggests, is only a set of policies that are enforced when creating/updating pod. It is not a container run-time security platform that can detect violations and shutdown pods. This is important to know, and this explains why you might want to consider tools like aqua, sysdig, Falco when you want more control over Kubernetes run-time security.
 
 
-https://res.cloudinary.com/practicaldev/image/fetch/s--hrJarSwJ--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/pwtsbifjjfu3ooyup3wu.png
-
-
   kubectl get psp eks.privileged
 
 <img width="705" alt="image" src="https://user-images.githubusercontent.com/74225291/197373481-270dd932-e715-4b39-8b95-23233598c119.png">
@@ -92,3 +89,21 @@ Default policy looks like this:
 
 This is the one from AWS EKS default PodSecurityPolicy. It’s a Standard Kubernetes resource definition format.Running your cluster with this policy is identical to running your cluster with the PodSecurityPolicy admission controller disabled.
 
+Lets approach this subject from a application standpoint. Most applications are deployed into EKS in form of deployments running pods. Or sample deployment will be such:
+
+Assuming we have agreen-field EKS with no special security controls on cluster/namespaces :
+In the manifest alpine-restricted.yml , we are defining a few security contexts at the pod and container level.
+
+**runAsUser**: 1000 means all containers in the pod will run as user UID 1000
+**fsGroup**: 2000 means the owner for mounted volumes and any files created in that volume will be GID 2000
+**allowPrivilegeEscalation**: false means the container cannot escalate privileges
+**readOnlyRootFilesystem**: true means the container can only read the root filesystem
+
+https://res.cloudinary.com/practicaldev/image/fetch/s--hrJarSwJ--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://dev-to-uploads.s3.amazonaws.com/i/pwtsbifjjfu3ooyup3wu.png
+
+**Delete the default Amazon EKS pod security policy**
+
+If you create more restrictive policies for your pods, then after doing so, you can delete the default Amazon EKS eks.privileged pod security policy to enable your custom policies.
+
+  kubectl delete psp eks.privileged
+  
