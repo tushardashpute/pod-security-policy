@@ -135,6 +135,8 @@ Now let’s run a test:
 
 **kubectl apply -f springboot-deployment.yaml**
 
+<img width="1540" alt="image" src="https://user-images.githubusercontent.com/74225291/197381621-55a2ee35-80ae-4d5a-b666-6ccf0f371c06.png">
+
 A very simple image with a spring-boot app, but in the Dockerfile, it runs as user ID 0 (root). You can try applying the above pod, and you will get error:
 
     Error: container has runAsNonRoot and image will run as root
@@ -165,6 +167,8 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
             - containerPort: 33333
             
 **kubectl apply -f springboot-deployment-nonroot.yaml**
+
+<img width="1525" alt="image" src="https://user-images.githubusercontent.com/74225291/197381674-9340072c-7763-4c9c-adab-021db1e35c9f.png">
 
 If you apply this one, it would work, because in this image it runs as user ID 2000.
 
