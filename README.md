@@ -33,7 +33,7 @@ You can do this, because either your cluster does not enable the PodSecurityPoli
 
 In the case of AWS EKS, the clusters with Kubernetes version 1.13 and higher have a default pod security policy named eks.privileged. This policy has no restriction on what kind of pod can be accepted into the system, which is equivalent to running Kubernetes with the PodSecurityPolicy controller disabled (or there is one that allows you to do everything).
 
-**What PodSecurityPolicy Can Not Do**
+# What PodSecurityPolicy Can Not Do
 
 However, PodSecurityPolicy can’t do everything.
 
@@ -95,8 +95,11 @@ Assuming we have agreen-field EKS with no special security controls on cluster/n
 In the manifest alpine-restricted.yml , we are defining a few security contexts at the pod and container level.
 
 **runAsUser**: 1000 means all containers in the pod will run as user UID 1000
+
 **fsGroup**: 2000 means the owner for mounted volumes and any files created in that volume will be GID 2000
+
 **allowPrivilegeEscalation**: false means the container cannot escalate privileges
+
 **readOnlyRootFilesystem**: true means the container can only read the root filesystem
 
 
