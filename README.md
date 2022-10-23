@@ -213,4 +213,33 @@ A very simple image with a spring-boot app, but in the Dockerfile, it runs as us
 If you apply this one, it would work, because in this image it runs as user ID 2000.
 
 
+# Best Practice
 
+Restrict the containers that can run as privileged
+Containers that run as privileged inherit all of the Linux capabilities assigned to root on the host. Containers seldom need these types of privileges to function properly. You can reject pods with containers configured to run as privileged.
+
+However, there are a few pods in EKS that need some type of privilege, be it run as root or capabilities. For example, the coredns need NET_BIND_SERVICE, but it doesn’t need to run as root; while aws-node, kube-proxy requires different access to different paths on the host machine.
+
+So the recommendation here is to create one policy for each pod, bind it to that service account so that each pod has exactly the required minimum set of permissions.
+
+Do not run processes in containers as root
+All containers run as root by default. This could be problematic if an attacker is able to exploit a vulnerability in the application and get shell access to the running container.
+
+You can mitigate this risk in a variety of ways:
+
+First, by removing the shell from the container image.
+
+Second, adding the USER directive to your Dockerfile or running the containers in the pod as a non-root user. The Kubernetes podSpec includes a set of fields under spec.securityContext, that allow to let you specify the user and/or group to run your application as. These fields are runAsUser and runAsGroup respectively. You can mandate the use of these fields by creating a pod security policy.
+
+Never run Docker in Docker or mount the socket in the container
+While this conveniently lets you build/run images in Docker containers, you’re basically relinquishing complete control of the node to the process running in the container.
+
+If you need to build container images inside Kubernetes, don’t. Or, either to use some building service or use build tools that don’t depend on docker daemon like Kaniko.
+
+Restrict the use of hostPath
+hostPath is a volume that mounts a directory from the host directly to the container. Rarely will pods need this type of access, but if they do, you need to be aware of the risks. By default pods that run as root will have write access to the file system exposed by hostPath. This could allow an attacker to modify the kubelet settings, create symbolic links to directories or files not directly exposed by the hostPath, e.g. /etc/shadow, install ssh keys, read secrets mounted to the host, and other malicious things. To mitigate the risks from hostPath, configure the spec.containers.volumeMounts as readOnly .
+
+You should also use a pod security policy to restrict the directories that can be used by hostPath volumes. You can see examples in this repo.
+
+Do not allow privileged escalation
+Privileged escalation allows a process to change the security context under which it's running. Sudo is a good example of this as are binaries with the SUID or SGID bit. Privileged escalation is basically a way for users to execute a file with the permissions of another user or group. You can prevent a container from using privileged escalation with PodSecurityPolicy as well.
